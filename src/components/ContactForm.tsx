@@ -26,7 +26,7 @@ export default function ContactForm({ onClose, onSubmit }: ContactFormProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-40 flex items-center justify-center p-4">
+    <div className="z-[100] flex items-center justify-center p-4">
       {/* Backdrop */}
       <div 
         className="absolute inset-0 bg-black/50 backdrop-blur-md transition-opacity"
