@@ -43,15 +43,16 @@ export function Projects() {
     <section id="projects" ref={containerRef} className="relative w-full">
       
       {/* Title Section */}
-      <div className="sticky top-0 h-screen w-full flex items-center justify-center z-0 pointer-events-none">
-          <span className="font-serif tracking-[0.5em] text-xs text-gold uppercase mb-6 block">The Vault of Creation</span>
-          <h2 className="font-serif text-6xl md:text-8xl text-ivory drop-shadow-[0_0_30px_rgba(212,175,55,0.3)]">
-            Grand Archives
-          </h2>
+      <div className="w-[100%] relative l-30 h-full gap-8 bg-white/40 backdrop-blur-xl p-8 lg:p-10 rounded-2xl border border-gold/20 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
+
+        <div className="sticky top-0 h-screen w-full flex items-center justify-center z-0 pointer-events-none">
+            <h2 className="font-serif text-6xl md:text-8xl text-ivory drop-shadow-[0_0_30px_rgba(212,175,55,0.3)]">
+              Grand Archives
+            </h2>
+        </div>
       </div>
 
-      {/* Project Sections */}
-      <div className="relative z-10">
+       <div className="relative z-10">
         {projects.map((project, i) => (
           <ProjectCard key={project.title} project={project} index={i} />
         ))}

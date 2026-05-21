@@ -53,17 +53,14 @@ export default function Contact(){
           >
             {appState !== 'success' && (
               <>
-                <h2 className="font-serif text-4xl md:text-6xl text-center text-[#f5d28e] drop-shadow-[0_0_15px_rgba(245,210,142,0.4)] mb-12">
-                  The High Council
-                </h2>
                 <button
                   onClick={handleOpenForm}
                   className="group relative overflow-hidden rounded-sm border border-[#c6a96b]/50 bg-[#c6a96b]/10 px-12 py-4 transition-all hover:bg-[#c6a96b]/30"
                 >
-                  <span className="relative z-10 font-serif tracking-[0.2em] text-[#c6a96b] group-hover:text-[#f5d28e] transition-colors">
-                    SEND RAVEN
+                  <span className="text-[#f5d28e] uppercase tracking-[0.3em] text-sm">
+                    Open Contact
                   </span>
-                </button>
+              </button>
               </>
             )}
           </div>

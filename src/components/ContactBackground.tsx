@@ -14,41 +14,52 @@ export default function VideoBackground({ currentState }: VideoBackgroundProps) 
   const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
-    if (currentState === 'success') {
-      setShowSuccess(true);
-      if (successVideoRef.current) {
-        successVideoRef.current.play();
-      }
-    } else {
-      setShowSuccess(false);
-      // Ensure idle plays (might need user interaction to autoplay in some browsers, but muted usually works)
-      if (idleVideoRef.current) {
-        idleVideoRef.current.play().catch(() => {});
-      }
-    }
-  }, [currentState]);
+  const idleVideo = idleVideoRef.current;
+  const successVideo = successVideoRef.current;
+
+  if (!idleVideo || !successVideo) return;
+
+  if (currentState === 'success') {
+    setShowSuccess(true);
+
+    // Stop idle video
+    idleVideo.pause();
+    idleVideo.currentTime = 0;
+
+    // Start success video
+    successVideo.currentTime = 0;
+    successVideo.play().catch(() => {});
+  } else {
+    setShowSuccess(false);
+
+    // Reset success video
+    successVideo.pause();
+    successVideo.currentTime = 0;
+
+    // Resume idle video
+    idleVideo.play().catch(() => {});
+  }
+}, [currentState]);
 
   return (
     <div className="absolute top-0 left-0 w-full h-full -z-10 bg-[#0f0e0c]">
-      {/* Idle Video */}
       <video
         ref={idleVideoRef}
         src="/videos/ContactIdle.mp4"
-        className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${
-          showSuccess ? 'opacity-0' : 'opacity-100'
-        }`}
+        className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000 ${
+  showSuccess ? 'opacity-0 invisible' : 'opacity-100 visible'
+}`}
         loop
         muted
         playsInline
       />
       
-      {/* Success Video */}
       <video
         ref={successVideoRef}
         src="/videos/ContactActive.mp4"
-        className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${
-          showSuccess ? 'opacity-100' : 'opacity-0'
-        }`}
+        className={`absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000 ${
+  showSuccess ? 'opacity-100 visible' : 'opacity-0 invisible'
+}`}
         muted
         playsInline
         // We only want it to play once

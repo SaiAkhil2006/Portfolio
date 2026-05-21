@@ -34,7 +34,7 @@ export function Skills() {
   const containerRef = useRef(null);
 
   return (
-    <section id="skills" className="relative py-40 bg-pearl overflow-hidden">
+    <section id="skills" className="w-[90%] h-[90%] ml-[5%] mt-[5%] relative py-40 bg-pearl overflow-hidden  gap-8 bg-white/40 backdrop-blur-xl p-8 lg:p-10 rounded-2xl border border-gold/20 shadow-[0_0_50px_rgba(0,0,0,0.5)]">
       {/* Background ambient gold lines connecting areas */}
       <div className="absolute inset-0 z-0 pointer-events-none opacity-20">
         <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -76,7 +76,7 @@ export function Skills() {
               <motion.div 
                 animate={{ y: [0, -10, 0] }}
                 transition={{ duration: 4, repeat: Infinity, delay: i * 0.5, ease: "easeInOut" }}
-                className="relative h-full border border-warm-gray/40 bg-white/40 backdrop-blur-xl p-8 shadow-lg hover:shadow-[0_20px_40px_rgba(212,175,55,0.15)] transition-all duration-700 rounded-sm"
+                className="rounded-xl relative h-full border border-warm-gray/40 bg-white/40 backdrop-blur-xl p-8 shadow-lg hover:shadow-[0_20px_40px_rgba(212,175,55,0.15)] transition-all duration-700 rounded-sm"
               >
                 {/* Glow border trail effect */}
                 <div className="absolute inset-0 border border-gold/0 group-hover:border-gold/50 transition-colors duration-700" />

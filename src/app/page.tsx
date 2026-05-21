@@ -17,7 +17,7 @@ export default function Home() {
           muted
           loop
           playsInline
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover blur-[2px]"
         >
           <source src="/videos/Background.mp4" type="video/mp4" />
         </video>

@@ -37,44 +37,47 @@ export function Achievements() {
 
   return (
     <section id="achievements" ref={containerRef} className="relative py-40 overflow-hidden">
-      
-      {/* Volumetric ambient background glow */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute top-1/4 left-1/4 w-[50vw] h-[50vw] bg-gold/5 blur-[150px] rounded-full mix-blend-multiply" />
-        <div className="absolute bottom-1/4 right-1/4 w-[40vw] h-[40vw] bg-white/40 blur-[100px] rounded-full mix-blend-screen" />
-      </div>
+      <div className="m-[5%] flex flex-col gap-8 bg-white/40 backdrop-blur-xl p-8 lg:p-10 rounded-2xl border border-gold/20 shadow-[0_0_50px_rgba(0,0,0,0.5)]"
+>
+        {/* Volumetric ambient background glow */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <div className="absolute top-1/4 left-1/4 w-[50vw] h-[50vw] bg-gold/5 blur-[150px] rounded-full mix-blend-multiply" />
+          <div className="absolute bottom-1/4 right-1/4 w-[40vw] h-[40vw] bg-white/40 blur-[100px] rounded-full mix-blend-screen" />
+        </div>
 
-      <div className="container relative z-10 mx-auto px-6 max-w-5xl">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-32"
-        >
-          <span className="font-serif tracking-[0.5em] text-xs text-gold uppercase mb-6 block">Path of Ascension</span>
-          <h2 className="font-serif text-5xl md:text-6xl text-foreground mb-6">
-            Chronicles
-          </h2>
-          <div className="h-[1px] w-24 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto opacity-70" />
-        </motion.div>
+        <div className="container relative z-10 mx-auto px-6 max-w-5xl">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-32"
+          >
+            <span className="font-serif tracking-[0.5em] text-xs text-gold uppercase mb-6 block">Path of Ascension</span>
+            <h2 className="font-serif text-5xl md:text-6xl text-foreground mb-6">
+              Chronicles
+            </h2>
+            <div className="h-[1px] w-24 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto opacity-70" />
+          </motion.div>
 
-        <div className="relative">
-          {/* Central Golden Beam - Background */}
-          <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[2px] bg-warm-gray/30" />
-          
-          {/* Central Golden Beam - Active Fill */}
-          <motion.div 
-            style={{ height: beamHeight }}
-            className="absolute left-1/2 -translate-x-1/2 top-0 w-[2px] " 
-          />
+          <div className="relative">
+            {/* Central Golden Beam - Background */}
+            <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[5px] bg-gradient-to-r from-transparent via-gold to-transparent" />
+            
+            {/* Central Golden Beam - Active Fill */}
+            <motion.div 
+              style={{ height: beamHeight }}
+              className="absolute left-1/2 -translate-x-1/2 top-0 w-[2px] " 
+            />
 
-          <div className="flex flex-col gap-32">
-            {timeline.map((item, i) => (
-              <TimelineNode key={i} item={item} index={i} />
-            ))}
+            <div className="flex flex-col gap-32">
+              {timeline.map((item, i) => (
+                <TimelineNode key={i} item={item} index={i} />
+              ))}
+            </div>
           </div>
         </div>
       </div>
+
     </section>
   );
 }

@@ -100,6 +100,8 @@ export function Hero() {
 
     // Play with error handling — autoplay may be blocked
     try {
+      active.playbackRate = 2;
+      
       await active.play();
     } catch (err) {
       console.warn("Hero active video play() blocked:", err);
@@ -114,7 +116,7 @@ export function Hero() {
 
     // Use the real duration now that metadata is guaranteed to be loaded
     const playDuration = isFinite(active.duration) && active.duration > 0.15
-      ? (active.duration - 0.15) * 1000
+      ? ((active.duration - 0.15)/ active.playbackRate) * 1000
       : 3000; // fallback: 3 s
 
     setTimeout(() => {
