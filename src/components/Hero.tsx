@@ -11,18 +11,21 @@ export function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const idleVideoRef = useRef<HTMLVideoElement>(null);
   const activeVideoRef = useRef<HTMLVideoElement>(null);
-  const hasEnteredRef = useRef(false); // prevents double-trigger
-  const [isEntered, setIsEntered] = useState(false);
+  const hasEnteredRef = useRef(false);
 
-  // Restore body overflow on unmount in case the animation never completed
+  const [isEntered, setIsEntered] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
+
+  // Prevent scrolling during hero intro
   useEffect(() => {
     document.body.style.overflow = "hidden";
+
     return () => {
       document.body.style.overflow = "auto";
     };
   }, []);
 
-  // Exit animation — only runs once when isEntered flips to true
+  // Fully remove Hero after animation completes
   useGSAP(
     () => {
       if (!isEntered) return;
@@ -54,13 +57,13 @@ export function Hero() {
           },
           "-=0.4"
         )
-        // Give the overlay a moment to be visible before snapping container out
         .to(containerRef.current, {
           opacity: 0,
           duration: 0.3,
           ease: "power2.out",
           onComplete: () => {
             document.body.style.overflow = "auto";
+            setIsHidden(true);
           },
         });
     },
@@ -68,8 +71,8 @@ export function Hero() {
   );
 
   const handleEnter = async () => {
-    // Guard against double-clicks / re-entry
     if (hasEnteredRef.current) return;
+
     hasEnteredRef.current = true;
 
     const active = activeVideoRef.current;
@@ -77,7 +80,6 @@ export function Hero() {
 
     if (!active || !idle) return;
 
-    // Immediately hide text
     gsap.to(".hero-content", {
       opacity: 0,
       y: -20,
@@ -85,45 +87,54 @@ export function Hero() {
       ease: "power2.out",
     });
 
-    // Wait for video metadata so .duration is reliable
     await new Promise<void>((resolve) => {
       if (active.readyState >= 1) {
         resolve();
       } else {
-        active.addEventListener("loadedmetadata", () => resolve(), {
-          once: true,
-        });
+        active.addEventListener(
+          "loadedmetadata",
+          () => resolve(),
+          { once: true }
+        );
       }
     });
 
     active.currentTime = 0;
 
-    // Play with error handling — autoplay may be blocked
     try {
       active.playbackRate = 2;
-      
       await active.play();
     } catch (err) {
       console.warn("Hero active video play() blocked:", err);
-      // Still transition even if video can't play
       setIsEntered(true);
       return;
     }
 
-    // Cross-fade videos
-    gsap.to(active, { opacity: 1, duration: 1, ease: "power2.out" });
-    gsap.to(idle, { opacity: 0, duration: 1, ease: "power2.out" });
+    gsap.to(active, {
+      opacity: 1,
+      duration: 1,
+      ease: "power2.out",
+    });
 
-    // Use the real duration now that metadata is guaranteed to be loaded
-    const playDuration = isFinite(active.duration) && active.duration > 0.15
-      ? ((active.duration - 0.15)/ active.playbackRate) * 1000
-      : 3000; // fallback: 3 s
+    gsap.to(idle, {
+      opacity: 0,
+      duration: 1,
+      ease: "power2.out",
+    });
+
+    const playDuration =
+      isFinite(active.duration) && active.duration > 0.15
+        ? ((active.duration - 0.15) / active.playbackRate) * 1000
+        : 3000;
 
     setTimeout(() => {
       active.pause();
       setIsEntered(true);
     }, playDuration);
   };
+
+  // Completely remove Hero after intro finishes
+  if (isHidden) return null;
 
   return (
     <div
@@ -134,10 +145,7 @@ export function Hero() {
       <div className="transition-overlay absolute inset-0 bg-white/10 backdrop-blur-sm opacity-0 pointer-events-none z-50" />
 
       {/* Video layer */}
-      <div
-        onClick={handleEnter}
-        className="absolute inset-0 z-0 h-full w-full cursor-pointer"
-      >
+      <div className="absolute inset-0 z-0 h-full w-full">
         <video
           ref={idleVideoRef}
           src="/videos/HeroIdle.mp4"
@@ -145,28 +153,32 @@ export function Hero() {
           loop
           muted
           playsInline
-          className="absolute inset-0 h-full w-full object-cover"
+          className="absolute inset-0 h-full w-full object-cover pointer-events-none"
         />
+
         <video
           ref={activeVideoRef}
           src="/videos/HeroActive.mp4"
           muted
           playsInline
-          className="absolute inset-0 h-full w-full object-cover opacity-0"
+          className="absolute inset-0 h-full w-full object-cover opacity-0 pointer-events-none"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent pointer-events-none" />
       </div>
 
-      <Fog opacity={0.6} className="z-10" />
-      <Particles className="z-10" />
+      {/* Effects */}
+      <Fog opacity={0.6} className="z-10 pointer-events-none" />
+      <Particles className="z-10 pointer-events-none" />
 
       <AnimatePresence>
         {!isEntered && (
           <motion.div
-            className="hero-content relative z-20 flex flex-col items-center text-center"
+            onClick={handleEnter}
+            className="hero-content relative z-20 flex cursor-pointer flex-col items-center text-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.5 }} // was duration: 0 — now intentional
+            transition={{ duration: 1, delay: 0.5 }}
             exit={{ opacity: 0 }}
           >
             <motion.h1

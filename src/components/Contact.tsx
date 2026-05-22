@@ -6,71 +6,109 @@ import ContactForm from "./ContactForm";
 
 type AppState = 'idle' | 'form_open' | 'success';
 
-export default function Contact() {
+export default function Home() {
   const [appState, setAppState] = useState<AppState>('idle');
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => { setMounted(true); }, []);
+  // Prevent hydration mismatch by ensuring we only render client-side state after mount
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const handleOpenForm = () => {
+    setAppState('form_open');
+  };
+
+  const handleCloseForm = () => {
+    setAppState('idle');
+  };
+
+  const handleSubmit = () => {
+    setAppState('success');
+  };
+
+  const handleReset = () => {
+    setAppState('idle');
+  };
 
   if (!mounted) return null;
 
   return (
     <div>
-      <main className="relative min-h-screen w-full flex flex-col items-center justify-center p-4 selection:bg-[#c6a96b]/30 selection:text-[#f5d28e]">
 
+      <main className="cursor-pointer relative min-h-screen w-full flex flex-col items-center justify-center p-4 selection:bg-[#c6a96b]/30 selection:text-[#f5d28e]">
+        
+        {/* Background Controller */}
         <VideoBackground currentState={appState === 'success' ? 'success' : 'idle'} />
 
-        <div className="relative z-[20] flex flex-col items-center justify-center w-full h-full">
+        {/* Main Content Layer */}
+        <div className="relative z-20 flex flex-col items-center justify-center w-full h-full">
+          
+          {/* Initial CTA */}
+        
+            {appState !== 'success' && (
+              <>
+                      
+                <div onClick={handleOpenForm}
+                  className="w-[50%] h-[300px]">
+                  .
+                </div>
 
-          {/* Initial CTA — fades out when form opens or success */}
-          <div className={`transition-all duration-1000 ease-in-out transform flex flex-col items-center justify-center gap-8 ${
-            appState === 'idle'
-              ? 'opacity-100 translate-y-0 scale-100 '
-              : 'opacity-0 translate-y-8 scale-95 '
-          }`}>
-            <button
-              onClick={() => setAppState('form_open')}
-              className="group relative overflow-hidden z-[100] rounded-sm border border-[#c6a96b]/50 bg-[#c6a96b]/10 px-12 py-4 transition-all hover:bg-[#c6a96b]/30"
-            >
-              <span className="text-[#f5d28e] uppercase tracking-[0.3em] text-sm">
-                Open Contact
-              </span>
-            </button>
-          </div>
+              </>
+            )}
 
-          {/* Form Modal — ALWAYS mounted, CSS controls visibility */}
-          <div className={`fixed inset-0 flex items-center justify-center z-[100] transition-all duration-700 ease-in-out ${
-            appState === 'form_open'
-              ? 'opacity-100 scale-100'
-              : 'opacity-0 scale-95'
-          }`}>
+          {/* Form Modal overlay with transition */}
+          {appState === 'form_open' && (
             <ContactForm
-              onClose={() => setAppState('idle')}
-              onSubmit={() => setAppState('success')}
+              onClose={handleCloseForm}
+              onSubmit={handleSubmit}
             />
-          </div>
+          )}
 
           {/* Success Message */}
-          <div className={`absolute inset-0 flex flex-col items-center justify-center transition-all duration-1000 delay-500 ease-in-out ${
-            appState === 'success'
-              ? 'opacity-100 translate-y-0 '
-              : 'opacity-0 translate-y-8 '
-          }`}>
-            <div className="bg-[#0f0e0c]/60 p-12 backdrop-blur-sm border border-[#c6a96b]/20 shadow-[0_0_50px_rgba(0,0,0,0.8)] rounded-sm text-center max-w-2xl">
-              <h2 className="text-4xl md:text-5xl text-[#f5d28e] mb-6 drop-shadow-[0_0_10px_rgba(245,210,142,0.5)]">
-                Message Dispatched
-              </h2>
-              <p className="text-[#e8dcc0] text-xl mb-12 tracking-wide leading-relaxed">
-                Thy raven has taken flight. We shall respond ere the next moon wanes.
-              </p>
-              <button
-                onClick={() => setAppState('idle')}
-                className="text-[#c6a96b] hover:text-[#f5d28e] uppercase tracking-widest text-sm transition-colors"
-              >
-                Return to the Hall
-              </button>
-            </div>
-          </div>
+            {appState === 'success' && (
+              <div className="relative overflow-hidden rounded-3xl border border-gold/20 bg-white/10 backdrop-blur-2xl shadow-[0_0_60px_rgba(0,0,0,0.6)] p-10 md:p-14 text-center max-w-2xl">
+
+  {/* Glow */}
+  <div className="absolute inset-0 bg-gradient-to-br from-gold/5 via-transparent to-transparent pointer-events-none" />
+
+  {/* Top Accent */}
+  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 h-[1px] bg-gradient-to-r from-transparent via-gold/70 to-transparent" />
+
+  {/* Icon */}
+  <div className="relative z-10 mb-8 flex justify-center">
+    <div className="flex items-center justify-center w-20 h-20 rounded-full border border-gold/20 bg-gold/10 shadow-[0_0_30px_rgba(212,175,55,0.15)]">
+      <span className="text-3xl text-gold">✦</span>
+    </div>
+  </div>
+
+  {/* Heading */}
+  <h2 className="relative z-10 font-serif text-4xl md:text-6xl text-gold mb-6 drop-shadow-[0_0_20px_rgba(212,175,55,0.25)]">
+    Message Sent
+  </h2>
+
+  {/* Description */}
+  <p className="relative z-10 text-foreground/75 text-lg md:text-xl leading-relaxed font-light max-w-xl mx-auto mb-12">
+    Your transmission has been received.
+    I shall review your message and respond
+    with precision and intent.
+  </p>
+
+  {/* Button */}
+  <button
+    onClick={handleReset}
+    className="group relative z-10 inline-flex items-center gap-3 overflow-hidden rounded-2xl border border-gold/20 bg-gold/10 px-8 py-4 text-sm uppercase tracking-[0.25em] text-gold transition-all duration-500 hover:border-gold/50 hover:bg-gold/20 hover:shadow-[0_0_30px_rgba(212,175,55,0.2)]"
+  >
+    <span className="relative z-10">
+      Return
+    </span>
+
+    <div className="w-5 h-[1px] bg-gold/60 transition-all duration-300 group-hover:w-8" />
+
+    <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
+  </button>
+</div>
+            )}
 
         </div>
       </main>

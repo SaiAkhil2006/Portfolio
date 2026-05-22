@@ -33,7 +33,7 @@ export default function VideoBackground({ currentState }: { currentState: VideoS
   }, [currentState]);
 
   return (
-    <div className="absolute top-0 left-0 w-full h-full  bg-[#0f0e0c]">
+    <div className="absolute top-0 left-0 w-full h-full pointer-events-none bg-[#0f0e0c]">
       <video
         ref={idleVideoRef}
         src="/videos/ContactIdle.mp4"
