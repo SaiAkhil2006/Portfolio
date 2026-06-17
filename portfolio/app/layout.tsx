@@ -17,7 +17,7 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
   title: 'Sai Akhil Karra',
   description:
-    'Portfolio of Adrian Vale, a machine learning engineer building intelligent systems with deep learning, NLP and production ML infrastructure.',
+    'Portfolio of Sai Akhil Karra',
   generator: 'v0.app',
   icons: {
     icon: [
