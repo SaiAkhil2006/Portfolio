@@ -17,7 +17,7 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
   title: 'Sai Akhil Karra',
   description:
-    'Portfolio of Sai Akhil Karra',
+    'Portfolio website of Sai Akhil Karra',
   generator: 'v0.app',
   icons: {
     icon: [
